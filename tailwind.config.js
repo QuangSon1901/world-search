@@ -17,7 +17,9 @@ module.exports = {
                 text: {
                     primary: '#242938',
                     red: '#D14242',
+                    AA: '#AAAAAA',
                 },
+                border: 'D9D9D9',
             },
             fontSize: {
                 primary: '1.6rem',

@@ -17,7 +17,7 @@ export default function Search() {
                             Truy vấn kiến thức chính xác nhất, dễ dàng nhất tại hệ thống tri thức{' '}
                             <span className="text-text-red">World</span> - Search any thing
                         </p>
-                        <SearchInput />
+                        <SearchInput className="mt-24" />
                     </div>
                 </Container>
             </Background>

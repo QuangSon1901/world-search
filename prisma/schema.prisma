@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model OntoKeyphrase {
+  id      Int      @id @default(autoincrement())
+  text    String    @db.VarChar(255)
+}
+
+model Relationship {
+  id      Int      @id @default(autoincrement())
+  name    String    @db.VarChar(255)
+  desc    String    @db.VarChar(255)
+  minScore    Decimal
+  maxScore    Decimal
+}
+
+model OntoKeyphraseRelationship {
+  id      Int       @id @default(autoincrement())
+  relationshipID Int
+  ontoKeyphraseIDFirst Int
+  ontoKeyphraseIDSecond Int
+}
+
+model Define {
+  id      Int       @id @default(autoincrement())
+  content     String   @db.Text
+}
+
+model Semantic {
+  id      Int       @id @default(autoincrement())
+  defID Int
+}
+
+model SemanticKeyphrase {
+  id      Int      @id @default(autoincrement())
+  text    String    @db.VarChar(255)
+  semanticID    Int
+}
+
+model SemanticKeyphraseRelationship {
+  id      Int       @id @default(autoincrement())
+  relationshipID Int
+  semanticKeyphraseIDFirst Int
+  semanticKeyphraseIDSecond Int
+}
