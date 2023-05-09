@@ -28,7 +28,7 @@ const SearchResult = () => {
             };
             fetchData();
         }
-    }, []);
+    }, [q]);
 
     return (
         <div>

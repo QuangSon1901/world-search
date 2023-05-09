@@ -1,10 +1,23 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Container from '../Container';
 import Background from './Background';
 import SearchInput from './SearchInput';
+import { useState } from 'react';
 
 export default function Search() {
+    const router = useRouter();
+
+    const [searchInput, setSearchInput] = useState('');
+
+    const handleChangeSearchInput = (e) => {
+        setSearchInput(e.target.value);
+    };
+
+    const handleSubmit = () => {
+        router.push(`/search-result?q=${searchInput}`);
+    };
     return (
         <div>
             <Background>
@@ -17,7 +30,12 @@ export default function Search() {
                             Truy vấn kiến thức chính xác nhất, dễ dàng nhất tại hệ thống tri thức{' '}
                             <span className="text-text-red">World</span> - Search any thing
                         </p>
-                        <SearchInput className="mt-24" />
+                        <SearchInput
+                            className="mt-24"
+                            searchInput={searchInput}
+                            onChange={handleChangeSearchInput}
+                            onSubmit={handleSubmit}
+                        />
                     </div>
                 </Container>
             </Background>

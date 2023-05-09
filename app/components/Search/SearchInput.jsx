@@ -3,15 +3,18 @@ import { FiSearch } from 'react-icons/fi';
 
 const options = [{ value: 'keyphrase', label: 'Keyphrase' }];
 
-export default function SearchInput({ className }) {
+export default function SearchInput({ searchInput = '', className, onChange, onSubmit }) {
     return (
         <div
             className={`max-w-7xl mx-auto relative flex flex-row border border-color-primary rounded-xl bg-bg-primary select-none ${className}`}
         >
             <input
                 type="text"
+                value={searchInput}
+                onChange={onChange}
                 placeholder="Nhâp mọi thứ bạn cần tìm"
                 className="flex-1 text-xl py-5 px-7 rounded-xl border-none outline-none"
+                onKeyUp={(event) => event.keyCode === 13 && onSubmit()}
             />
             <div className="flex items-center justify-center">
                 <select
@@ -23,7 +26,7 @@ export default function SearchInput({ className }) {
                     <option value="syntax">Syntax</option>
                 </select>
             </div>
-            <div className="px-8 flex items-center justify-center cursor-pointer">
+            <div className="px-8 flex items-center justify-center cursor-pointer" onClick={onSubmit}>
                 <FiSearch className="text-color-primary text-4xl" />
             </div>
         </div>
