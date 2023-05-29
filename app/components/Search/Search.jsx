@@ -6,18 +6,35 @@ import Background from './Background';
 import SearchInput from './SearchInput';
 import { useState } from 'react';
 
+const options = [
+    { value: 'natural', label: 'Natural', suggest: 'Nhập mọi thứ bạn muốn tìm' },
+    { value: 'keyphrase', label: 'Keyphrase', suggest: 'Nhập vào danh sách các keyphrase cách nhau bằng dấu ","' },
+    {
+        value: 'syntax',
+        label: 'Syntax',
+        suggest:
+            'Nhập dữ liệu theo dạng câu truy vấn "Ks|Condition|Es" (Ks và Es bắt buộc phải có). VD: Định nghĩa, ví dụ | liên quan đến | đồ thị',
+    },
+];
+
 export default function Search() {
     const router = useRouter();
 
     const [searchInput, setSearchInput] = useState('');
+    const [optionSearch, setOptionSearch] = useState(options[0]);
 
     const handleChangeSearchInput = (e) => {
         setSearchInput(e.target.value);
     };
 
     const handleSubmit = () => {
-        router.push(`/search-result?q=${searchInput}`);
+        router.push(`/search-result?q=${searchInput}&type=${optionSearch.value}`);
     };
+
+    const handleChangeOptionSearch = (e) => {
+        setOptionSearch(options.find((value) => value.value === e.target.value));
+    };
+
     return (
         <div>
             <Background>
@@ -33,6 +50,9 @@ export default function Search() {
                         <SearchInput
                             className="mt-24"
                             searchInput={searchInput}
+                            optionSearch={optionSearch}
+                            options={options}
+                            onChangeOptionSearch={handleChangeOptionSearch}
                             onChange={handleChangeSearchInput}
                             onSubmit={handleSubmit}
                         />

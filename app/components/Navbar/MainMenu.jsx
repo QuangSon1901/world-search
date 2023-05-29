@@ -9,7 +9,7 @@ const mainMenu = [
     },
     {
         title: 'Lý thuyết đồ thị',
-        url: routesConfig.home,
+        url: routesConfig.tNode,
     },
     {
         title: 'Hướng dẫn ',
