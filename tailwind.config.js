@@ -10,6 +10,7 @@ module.exports = {
                 bg: {
                     primary: '#FFFFFF',
                     second: '#F5F8F9',
+                    overlay: 'rgba(0, 0, 0, 0.2)',
                 },
                 color: {
                     primary: '#2074BB',
@@ -27,4 +28,5 @@ module.exports = {
         },
     },
     plugins: [],
+    darkMode: 'class',
 };

@@ -30,3 +30,34 @@ html ::-webkit-scrollbar-track {
     background-color: transparent;
     border-radius: 0;
 }
+
+svg {
+    display: unset !important;
+}
+
+.content-md * {
+    line-height: 2.6rem;
+}
+
+.content-md ul {
+    list-style: unset;
+    margin: unset;
+    padding: unset;
+    margin: 0 1em;
+    padding-left: 40px;
+}
+
+.wrapper {
+    position: relative;
+    width: 100%;
+    min-width: 36rem;
+    max-height: min((100vh - 20px) - 56px, 734px);
+    background: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 12%) 0px 2px 12px;
+    border-radius: 8px;
+    overflow: hidden auto;
+
+    &.shadow-2 {
+        box-shadow: 0 1px 2px var(--shadow-2);
+    }
+}

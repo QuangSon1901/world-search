@@ -7,13 +7,16 @@ import SearchInput from './SearchInput';
 import { useState } from 'react';
 
 const options = [
-    { value: 'natural', label: 'Natural', suggest: 'Nhập mọi thứ bạn muốn tìm' },
-    { value: 'keyphrase', label: 'Keyphrase', suggest: 'Nhập vào danh sách các keyphrase cách nhau bằng dấu ","' },
+    { value: 'keyphrase', label: 'Keyphrase', suggest: 'Nhập mọi thứ bạn muốn tìm' },
+    {
+        value: 'keyword',
+        label: 'Keyword',
+        suggest: 'Tìm kiếm theo từ khoá. Nhập vào danh sách các từ khoá cách nhau bằng dấu ","',
+    },
     {
         value: 'syntax',
         label: 'Syntax',
-        suggest:
-            'Nhập dữ liệu theo dạng câu truy vấn "Ks|Condition|Es" (Ks và Es bắt buộc phải có). VD: Định nghĩa, ví dụ | liên quan đến | đồ thị',
+        suggest: 'Nhập dữ liệu theo dạng câu truy vấn "Ks|Condition|Es" (Ks và Es bắt buộc phải có).',
     },
 ];
 
