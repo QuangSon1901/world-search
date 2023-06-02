@@ -28,9 +28,9 @@ const AuthModal = ({ authActive, close, setAuthActive }) => {
                     </div>
                     <div className="py-6">
                         {authActive.type === 'login' ? (
-                            <Login setAuthActive={setAuthActive} />
+                            <Login setAuthActive={setAuthActive} close={close} />
                         ) : (
-                            <Register setAuthActive={setAuthActive} />
+                            <Register setAuthActive={setAuthActive} close={close} />
                         )}
                     </div>
                 </div>
