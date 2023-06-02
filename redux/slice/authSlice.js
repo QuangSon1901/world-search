@@ -52,6 +52,14 @@ const authSlice = createSlice({
                     state.isAuthenticated = false;
                     state.user = null;
                 }
+            })
+            .addCase(logoutUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(logoutUser.fulfilled, (state, action) => {
+                state.isAuthenticated = false;
+                state.user = null;
+                state.loading = false;
             });
     },
 });

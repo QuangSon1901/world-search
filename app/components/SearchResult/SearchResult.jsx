@@ -5,15 +5,22 @@ import { useEffect, useState } from 'react';
 import Container from '../Container';
 import MarkdownIt from 'markdown-it';
 import Link from 'next/link';
+import { storage } from '@/libs/storage';
+import * as httpRequest from '@/libs/httpRequest';
+
 const mdParser = new MarkdownIt({ html: true });
 export const getSemantic = async (q, type) => {
-    const res = await fetch(`http://localhost:8000/api/${type}?q=${q}`);
-
+    const token = storage.get('ACCESS_TOKEN');
+    const res = await httpRequest.get(`http://localhost:8000/api/${type}?q=${q}`, {
+        headers: {
+            Authorization: `Bearer ${token || ''}`,
+        },
+    });
     if (!res.ok) {
         return;
     }
 
-    return res.json();
+    return res;
 };
 
 const SearchResult = () => {

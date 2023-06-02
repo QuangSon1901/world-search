@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Button';
 import { authSelector } from '@/redux/selector';
-import { getUser, loginUser } from '@/redux/slice/authSlice';
+import { getUser, loginUser, logoutUser } from '@/redux/slice/authSlice';
 import { useEffect } from 'react';
 
 export default function UserMenu({ setAuthActive }) {
@@ -28,7 +28,7 @@ export default function UserMenu({ setAuthActive }) {
                 )) || (
                     <>
                         <span>{user.name}</span>
-                        <Button label="Đăng xuất" onClick={() => dispatch(loginUser())} />
+                        <Button label="Đăng xuất" onClick={() => dispatch(logoutUser())} />
                     </>
                 )}
             </div>
