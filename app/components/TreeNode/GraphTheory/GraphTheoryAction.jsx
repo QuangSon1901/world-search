@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 const mdParser = new MarkdownIt({ html: true });
 mdParser.use(mathjax3);
 export const getParentNode = async () => {
-    const res = await fetch(`http://localhost:8000/api/parent-node`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/parent-node`);
 
     if (!res.ok) {
         throw new Error('Failed to fetch data');
@@ -17,7 +17,7 @@ export const getParentNode = async () => {
 };
 
 export const addProducts = async (formData) => {
-    const res = await fetch('http://localhost:8000/api/add-node', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-node`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

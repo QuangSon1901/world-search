@@ -11,7 +11,7 @@ import * as httpRequest from '@/libs/httpRequest';
 const mdParser = new MarkdownIt({ html: true });
 export const getSemantic = async (q, type, filter = '') => {
     const token = storage.get('ACCESS_TOKEN');
-    const res = await httpRequest.get(`http://localhost:8000/api/${type}?q=${q}&type=${filter}`, {
+    const res = await httpRequest.get(`${process.env.NEXT_PUBLIC_API_URL}/${type}?q=${q}&type=${filter}`, {
         headers: {
             Authorization: `Bearer ${token || ''}`,
         },

@@ -12,7 +12,7 @@ const mdParser = new MarkdownIt({ html: true });
 mdParser.use(mathjax3);
 
 export const getTreeNode = async () => {
-    const res = await fetch(`http://localhost:8000/api/t-node`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/t-node`);
 
     if (!res.ok) {
         return;

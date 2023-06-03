@@ -42,7 +42,7 @@ export default function SearchInput({
 
         const fetchSuggestApi = async () => {
             try {
-                const res = await httpRequest.get('http://127.0.0.1:8000/api/keyphrase', {
+                const res = await httpRequest.get(`${process.env.NEXT_PUBLIC_API_URL}/keyphrase`, {
                     params: { q: debouncedValue, suggest: true },
                 });
                 setSearchResult({
@@ -62,7 +62,7 @@ export default function SearchInput({
                 return;
             }
             try {
-                const res = await httpRequest.get(`http://127.0.0.1:8000/api/get-history-search`, {
+                const res = await httpRequest.get(`${process.env.NEXT_PUBLIC_API_URL}/get-history-search`, {
                     params: { q: debouncedValue, type: optionSearch.value.toUpperCase(), limit: historyLimit },
                     headers: {
                         Authorization: `Bearer ${token || ''}`,
@@ -93,7 +93,7 @@ export default function SearchInput({
 
     const handleDeleteAllHistory = async () => {
         const token = storage.get('ACCESS_TOKEN');
-        const res = await httpRequest.deleted(`http://127.0.0.1:8000/api/delete-all-history`, {
+        const res = await httpRequest.deleted(`${process.env.NEXT_PUBLIC_API_URL}/delete-all-history`, {
             headers: {
                 Authorization: `Bearer ${token || ''}`,
             },
