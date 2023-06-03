@@ -12,6 +12,24 @@ const options = [
         value: 'keyword',
         label: 'Keyword',
         suggest: 'Tìm kiếm theo từ khoá. Nhập vào danh sách các từ khoá cách nhau bằng dấu ","',
+        filter: [
+            {
+                value: 'concept',
+                label: 'Khái niệm',
+            },
+            {
+                value: 'rule',
+                label: 'Quy tắc (tính chất/ định lý/ hệ quả)',
+            },
+            {
+                value: 'method',
+                label: 'Bài toán',
+            },
+            {
+                value: 'func',
+                label: 'Phương pháp/ Thuật giải',
+            },
+        ],
     },
     {
         value: 'syntax',
@@ -24,10 +42,17 @@ const SearchMini = () => {
     const searchParams = useSearchParams();
     const q = searchParams.get('q');
     const type = searchParams.get('type');
-
+    let filter = searchParams.get('filter');
+    filter = filter && filter.split('|');
     const router = useRouter();
 
-    const [searchInput, setSearchInput] = useState(q);
+    const [searchInput, setSearchInput] = useState(q || '');
+    const [searchKeyword, setSearchKeyword] = useState({
+        concept: (filter && filter.includes('concept')) || false,
+        rule: (filter && filter.includes('rule')) || false,
+        func: (filter && filter.includes('func')) || false,
+        method: (filter && filter.includes('method')) || false,
+    });
     const [optionSearch, setOptionSearch] = useState(
         (type && options.find((value) => value.value === type)) || options[0],
     );
@@ -37,7 +62,15 @@ const SearchMini = () => {
     };
 
     const handleSubmit = () => {
-        router.push(`/search-result?q=${searchInput}&type=${optionSearch.value}`);
+        let result = '';
+        if (optionSearch.value === 'keyword') {
+            const trueElements = Object.entries(searchKeyword)
+                .filter(([key, value]) => value === true)
+                .map(([key, value]) => key);
+
+            result = trueElements.join('|');
+        }
+        router.push(`/search-result?q=${searchInput}&type=${optionSearch.value}&filter=${result}`);
     };
 
     const handleChangeOptionSearch = (e) => {
@@ -56,6 +89,8 @@ const SearchMini = () => {
                             optionSearch={optionSearch}
                             options={options}
                             onChangeOptionSearch={handleChangeOptionSearch}
+                            searchKeyword={searchKeyword}
+                            setSearchKeyword={setSearchKeyword}
                         />
                     </div>
                 </Container>

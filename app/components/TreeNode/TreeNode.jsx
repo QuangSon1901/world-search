@@ -27,14 +27,12 @@ const TreeNode = () => {
 
     const [data, setData] = useState(null);
     const [nodeActive, setNodeActive] = useState(null);
-    var result = mdParser.render('# Math Rulez! \n  $\\sqrt{3x-1}+(1+x)^2$');
 
     useEffect(() => {
         const fetchData = async () => {
             const fetchTreeNode = await getTreeNode();
             setData(fetchTreeNode.result);
             if (!nodeActive && !node) {
-                console.log(nodeActive);
                 setNodeActive(fetchTreeNode.result[0].childrens[0].id);
             }
         };

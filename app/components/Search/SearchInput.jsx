@@ -26,6 +26,8 @@ export default function SearchInput({
     onChangeOptionSearch,
     optionSearch,
     options,
+    searchKeyword,
+    setSearchKeyword,
 }) {
     const router = useRouter();
     const [searchResult, setSearchResult] = useState(searchInit);
@@ -33,7 +35,6 @@ export default function SearchInput({
     const [suggest, setSuggest] = useState(false);
 
     const debouncedValue = useDebounce(searchInput, 500);
-
     const inputRef = useRef();
 
     useEffect(() => {
@@ -48,9 +49,7 @@ export default function SearchInput({
                     ...searchResult,
                     suggest: res.result,
                 });
-            } catch (error) {
-                console.log(error);
-            }
+            } catch (error) {}
         };
 
         fetchSuggestApi();
@@ -64,7 +63,7 @@ export default function SearchInput({
             }
             try {
                 const res = await httpRequest.get(`http://127.0.0.1:8000/api/get-history-search`, {
-                    params: { q: debouncedValue, type: 'KEYPHRASE', limit: historyLimit },
+                    params: { q: debouncedValue, type: optionSearch.value.toUpperCase(), limit: historyLimit },
                     headers: {
                         Authorization: `Bearer ${token || ''}`,
                     },
@@ -78,7 +77,7 @@ export default function SearchInput({
             } catch (error) {}
         };
         fetchApiHistory();
-    }, [suggest, historyLimit]);
+    }, [suggest, historyLimit, optionSearch.value]);
 
     const handleSearchSubmit = () => {
         onSubmit();
@@ -117,7 +116,7 @@ export default function SearchInput({
                         <div className="w-[80rem] text-left" tabIndex={-1} {...attrs}>
                             <PopperWrapper style={{ padding: '8px' }}>
                                 <div className="w-full p-4 text-2xl">
-                                    <ul className="space-y-8 max-h-[200px] overflow-hidden overflow-y-auto">
+                                    <ul className="space-y-8 max-h-[200px] overflow-hidden overflow-y-auto pb-4">
                                         {searchResult.history &&
                                             searchResult.history.length > 0 &&
                                             searchResult.history.map((history) => (
@@ -163,10 +162,13 @@ export default function SearchInput({
                                                     searchResult.suggest.length > 0 &&
                                                     searchResult.suggest.map((suggest) => (
                                                         <li key={suggest.concept.id}>
-                                                            <Link href={'/'} className="flex items-center space-x-4">
+                                                            <div
+                                                                onClick={() => handleLinkClick(suggest.concept.name)}
+                                                                className="flex items-center space-x-4 cursor-pointer"
+                                                            >
                                                                 <FiArrowUpRight />
                                                                 <span>{suggest.concept.name}</span>
-                                                            </Link>
+                                                            </div>
                                                         </li>
                                                     ))}
                                             </ul>
@@ -242,22 +244,20 @@ export default function SearchInput({
             </div>
             {optionSearch.value === 'keyword' && (
                 <div className="text-left mt-4 ml-4 text-2xl text-text-primary space-x-6">
-                    <label className="space-x-2 cursor-pointer select-none" htmlFor="concept">
-                        <input className="translate-y-[0.15rem] cursor-pointer" type="checkbox" value="" id="concept" />
-                        <span>Khái niệm</span>
-                    </label>
-                    <label className="space-x-2 cursor-pointer select-none" htmlFor="rule">
-                        <input className="translate-y-[0.15rem] cursor-pointer" type="checkbox" value="" id="rule" />
-                        <span>Quy tắc (tính chất/ định lý/ hệ quả)</span>
-                    </label>
-                    <label className="space-x-2 cursor-pointer select-none" htmlFor="method">
-                        <input className="translate-y-[0.15rem] cursor-pointer" type="checkbox" value="" id="method" />
-                        <span>Bài toán</span>
-                    </label>
-                    <label className="space-x-2 cursor-pointer select-none" htmlFor="func">
-                        <input className="translate-y-[0.15rem] cursor-pointer" type="checkbox" value="" id="func" />
-                        <span>Phương pháp/ Thuật giải</span>
-                    </label>
+                    {optionSearch.filter.map((value, index) => (
+                        <label key={index} className="space-x-2 cursor-pointer select-none" htmlFor={value.value}>
+                            <input
+                                className="translate-y-[0.15rem] cursor-pointer"
+                                type="checkbox"
+                                checked={searchKeyword[value.value]}
+                                onChange={() =>
+                                    setSearchKeyword({ ...searchKeyword, [value.value]: !searchKeyword[value.value] })
+                                }
+                                id={value.value}
+                            />
+                            <span>{value.label}</span>
+                        </label>
+                    ))}
                 </div>
             )}
         </div>

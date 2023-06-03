@@ -12,6 +12,24 @@ const options = [
         value: 'keyword',
         label: 'Keyword',
         suggest: 'Tìm kiếm theo từ khoá. Nhập vào danh sách các từ khoá cách nhau bằng dấu ","',
+        filter: [
+            {
+                value: 'concept',
+                label: 'Khái niệm',
+            },
+            {
+                value: 'rule',
+                label: 'Quy tắc (tính chất/ định lý/ hệ quả)',
+            },
+            {
+                value: 'method',
+                label: 'Bài toán',
+            },
+            {
+                value: 'func',
+                label: 'Phương pháp/ Thuật giải',
+            },
+        ],
     },
     {
         value: 'syntax',
@@ -24,14 +42,22 @@ export default function Search() {
     const router = useRouter();
 
     const [searchInput, setSearchInput] = useState('');
+    const [searchKeyword, setSearchKeyword] = useState({ concept: false, rule: false, func: false, method: false });
     const [optionSearch, setOptionSearch] = useState(options[0]);
-
     const handleChangeSearchInput = (e) => {
         setSearchInput(e.target.value);
     };
 
     const handleSubmit = () => {
-        router.push(`/search-result?q=${searchInput}&type=${optionSearch.value}`);
+        let result = '';
+        if (optionSearch.value === 'keyword') {
+            const trueElements = Object.entries(searchKeyword)
+                .filter(([key, value]) => value === true)
+                .map(([key, value]) => key);
+
+            result = trueElements.join('|');
+        }
+        router.push(`/search-result?q=${searchInput}&type=${optionSearch.value}&filter=${result}`);
     };
 
     const handleChangeOptionSearch = (e) => {
@@ -58,6 +84,8 @@ export default function Search() {
                             onChangeOptionSearch={handleChangeOptionSearch}
                             onChange={handleChangeSearchInput}
                             onSubmit={handleSubmit}
+                            searchKeyword={searchKeyword}
+                            setSearchKeyword={setSearchKeyword}
                         />
                     </div>
                 </Container>

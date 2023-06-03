@@ -9,9 +9,9 @@ import { storage } from '@/libs/storage';
 import * as httpRequest from '@/libs/httpRequest';
 
 const mdParser = new MarkdownIt({ html: true });
-export const getSemantic = async (q, type) => {
+export const getSemantic = async (q, type, filter = '') => {
     const token = storage.get('ACCESS_TOKEN');
-    const res = await httpRequest.get(`http://localhost:8000/api/${type}?q=${q}`, {
+    const res = await httpRequest.get(`http://localhost:8000/api/${type}?q=${q}&type=${filter}`, {
         headers: {
             Authorization: `Bearer ${token || ''}`,
         },
@@ -27,19 +27,18 @@ const SearchResult = () => {
     const searchParams = useSearchParams();
     const q = searchParams.get('q');
     const type = searchParams.get('type');
-
+    const filter = searchParams.get('filter');
     const [data, setData] = useState(null);
 
     useEffect(() => {
         if (q && q.trim().length > 0 && type) {
             const fetchData = async () => {
-                const fetchSemantic = await getSemantic(q, type);
+                const fetchSemantic = await getSemantic(q, type, filter);
                 setData(fetchSemantic.result);
             };
             fetchData();
         }
     }, [q, type]);
-    console.log(data);
     return (
         <div>
             <Container>
@@ -92,7 +91,9 @@ const SearchResult = () => {
                                                     </div>
                                                     <div>
                                                         {relate.array.map((com) => (
-                                                            <Link href={'/'}>
+                                                            <Link
+                                                                href={`/search-result?q=${com.concept.name}&type=${type}&filter=${filter}`}
+                                                            >
                                                                 <div
                                                                     key={com.concept.id}
                                                                     className="border mb-6 rounded-xl p-6 hover:underline"
