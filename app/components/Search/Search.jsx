@@ -42,6 +42,8 @@ export default function Search() {
     const router = useRouter();
 
     const [searchInput, setSearchInput] = useState('');
+    const [searchInputCondition, setSearchInputCondition] = useState('');
+    const [searchInputEs, setSearchInputEs] = useState('');
     const [searchKeyword, setSearchKeyword] = useState({ concept: false, rule: false, func: false, method: false });
     const [optionSearch, setOptionSearch] = useState(options[0]);
     const handleChangeSearchInput = (e) => {
@@ -50,6 +52,7 @@ export default function Search() {
 
     const handleSubmit = () => {
         let result = '';
+        let query = searchInput;
         if (optionSearch.value === 'keyword') {
             const trueElements = Object.entries(searchKeyword)
                 .filter(([key, value]) => value === true)
@@ -57,7 +60,12 @@ export default function Search() {
 
             result = trueElements.join('|');
         }
-        router.push(`/search-result?q=${searchInput}&type=${optionSearch.value}&filter=${result}`);
+
+        if (optionSearch.value === 'syntax') {
+            query = `${searchInput}|${searchInputCondition}|${searchInputEs}`;
+        }
+
+        router.push(`/search-result?q=${query}&type=${optionSearch.value}&filter=${result}`);
     };
 
     const handleChangeOptionSearch = (e) => {
@@ -79,10 +87,14 @@ export default function Search() {
                         <SearchInput
                             className="mt-24"
                             searchInput={searchInput}
+                            searchInputCondition={searchInputCondition}
+                            searchInputEs={searchInputEs}
                             optionSearch={optionSearch}
                             options={options}
                             onChangeOptionSearch={handleChangeOptionSearch}
                             onChange={handleChangeSearchInput}
+                            onChangeCondition={(e) => setSearchInputCondition(e.target.value)}
+                            onChangeEs={(e) => setSearchInputEs(e.target.value)}
                             onSubmit={handleSubmit}
                             searchKeyword={searchKeyword}
                             setSearchKeyword={setSearchKeyword}

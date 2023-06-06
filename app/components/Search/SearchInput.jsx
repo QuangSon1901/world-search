@@ -20,8 +20,12 @@ const searchInit = {
 
 export default function SearchInput({
     searchInput = '',
+    searchInputCondition = '',
+    searchInputEs = '',
     className,
     onChange,
+    onChangeCondition,
+    onChangeEs,
     onSubmit,
     onChangeOptionSearch,
     optionSearch,
@@ -199,8 +203,8 @@ export default function SearchInput({
                                 </div>
                                 <input
                                     type="text"
-                                    value={searchInput}
-                                    onChange={onChange}
+                                    value={searchInputCondition}
+                                    onChange={onChangeCondition}
                                     placeholder={
                                         optionSearch.value === 'syntax' ? 'Nhập vào Condition' : optionSearch.suggest
                                     }
@@ -212,8 +216,8 @@ export default function SearchInput({
                                 </div>
                                 <input
                                     type="text"
-                                    value={searchInput}
-                                    onChange={onChange}
+                                    value={searchInputEs}
+                                    onChange={onChangeEs}
                                     placeholder={optionSearch.value === 'syntax' ? 'Nhập vào Es' : optionSearch.suggest}
                                     className="flex-1 text-xl py-5 px-7 rounded-xl border-none outline-none"
                                     onKeyUp={(event) => event.keyCode === 13 && handleSearchSubmit()}

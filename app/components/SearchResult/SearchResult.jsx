@@ -7,8 +7,11 @@ import MarkdownIt from 'markdown-it';
 import Link from 'next/link';
 import { storage } from '@/libs/storage';
 import * as httpRequest from '@/libs/httpRequest';
+import mathjax3 from 'markdown-it-mathjax3';
 
 const mdParser = new MarkdownIt({ html: true });
+mdParser.use(mathjax3);
+
 export const getSemantic = async (q, type, filter = '') => {
     const token = storage.get('ACCESS_TOKEN');
     const res = await httpRequest.get(`${process.env.NEXT_PUBLIC_API_URL}/${type}?q=${q}&type=${filter}`, {
@@ -38,7 +41,8 @@ const SearchResult = () => {
             };
             fetchData();
         }
-    }, [q, type]);
+    }, [q, type, filter]);
+
     return (
         <div>
             <Container>
@@ -48,7 +52,27 @@ const SearchResult = () => {
                             <div className="pr-4">
                                 <div className="pb-16">
                                     <div className="text-text-AA text-3xl font-medium mb-6">Dữ liệu nhập vào</div>
-                                    <div className="text-text-primary text-3xl font-medium">{q}</div>
+                                    {type === 'syntax' ? (
+                                        <>
+                                            {q.split('|')[0].length > 0 && (
+                                                <div className="text-text-primary text-3xl font-medium">
+                                                    {`Ks        := ${q.split('|')[0]}`}
+                                                </div>
+                                            )}
+                                            {q.split('|')[1].length > 0 && (
+                                                <div className="text-text-primary text-3xl font-medium">
+                                                    {`Condition := ${q.split('|')[1]}`}
+                                                </div>
+                                            )}
+                                            {q.split('|')[2].length > 0 && (
+                                                <div className="text-text-primary text-3xl font-medium">
+                                                    {`Es        := ${q.split('|')[2]}`}
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <div className="text-text-primary text-3xl font-medium">{q}</div>
+                                    )}
                                 </div>
                                 {data &&
                                     data.main.length > 0 &&
@@ -59,6 +83,7 @@ const SearchResult = () => {
                                                 className="text-text-primary text-3xl font-medium"
                                                 dangerouslySetInnerHTML={{ __html: mdParser.render(com.content) }}
                                             ></div>
+
                                             {com.type === 'Ví dụ' && (
                                                 <Link href={'/'} className="text-color-primary hover:underline">
                                                     Xem thêm ví dụ
@@ -90,7 +115,7 @@ const SearchResult = () => {
                                                         {relate.type}
                                                     </div>
                                                     <div>
-                                                        {relate.array.map((com) => (
+                                                        {relate.array.slice(0, 3).map((com) => (
                                                             <Link
                                                                 href={`/search-result?q=${com.concept.name}&type=${type}&filter=${filter}`}
                                                             >

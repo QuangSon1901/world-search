@@ -46,7 +46,9 @@ const SearchMini = () => {
     filter = filter && filter.split('|');
     const router = useRouter();
 
-    const [searchInput, setSearchInput] = useState(q || '');
+    const [searchInput, setSearchInput] = useState((type === 'syntax' && q.split('|')[0]) || q || '');
+    const [searchInputCondition, setSearchInputCondition] = useState((type === 'syntax' && q.split('|')[1]) || '');
+    const [searchInputEs, setSearchInputEs] = useState((type === 'syntax' && q.split('|')[2]) || '');
     const [searchKeyword, setSearchKeyword] = useState({
         concept: (filter && filter.includes('concept')) || false,
         rule: (filter && filter.includes('rule')) || false,
@@ -63,6 +65,7 @@ const SearchMini = () => {
 
     const handleSubmit = () => {
         let result = '';
+        let query = searchInput;
         if (optionSearch.value === 'keyword') {
             const trueElements = Object.entries(searchKeyword)
                 .filter(([key, value]) => value === true)
@@ -70,7 +73,10 @@ const SearchMini = () => {
 
             result = trueElements.join('|');
         }
-        router.push(`/search-result?q=${searchInput}&type=${optionSearch.value}&filter=${result}`);
+        if (optionSearch.value === 'syntax') {
+            query = `${searchInput}|${searchInputCondition}|${searchInputEs}`;
+        }
+        router.push(`/search-result?q=${query}&type=${optionSearch.value}&filter=${result}`);
     };
 
     const handleChangeOptionSearch = (e) => {
@@ -84,7 +90,11 @@ const SearchMini = () => {
                     <div className="pt-20 pb-20 text-center">
                         <SearchInput
                             searchInput={searchInput}
+                            searchInputCondition={searchInputCondition}
+                            searchInputEs={searchInputEs}
                             onChange={handleChangeSearchInput}
+                            onChangeCondition={(e) => setSearchInputCondition(e.target.value)}
+                            onChangeEs={(e) => setSearchInputEs(e.target.value)}
                             onSubmit={handleSubmit}
                             optionSearch={optionSearch}
                             options={options}
