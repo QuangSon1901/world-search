@@ -5,7 +5,7 @@ import Container from '../Container';
 import Background from './Background';
 import SearchInput from './SearchInput';
 import { useState } from 'react';
-
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 const options = [
     { value: 'keyphrase', label: 'Keyphrase', suggest: 'Nhập mọi thứ bạn muốn tìm' },
     {
@@ -76,6 +76,7 @@ const SearchMini = () => {
         if (optionSearch.value === 'syntax') {
             query = `${searchInput}|${searchInputCondition}|${searchInputEs}`;
         }
+        Loading.circle({ svgColor: '#2563EB', zindex: '9999999' });
         router.push(`/search-result?q=${query}&type=${optionSearch.value}&filter=${result}`);
     };
 

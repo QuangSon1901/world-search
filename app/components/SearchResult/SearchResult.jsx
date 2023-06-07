@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { storage } from '@/libs/storage';
 import * as httpRequest from '@/libs/httpRequest';
 import mathjax3 from 'markdown-it-mathjax3';
-
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 const mdParser = new MarkdownIt({ html: true });
 mdParser.use(mathjax3);
 
@@ -38,6 +38,7 @@ const SearchResult = () => {
             const fetchData = async () => {
                 const fetchSemantic = await getSemantic(q, type, filter);
                 setData(fetchSemantic.result);
+                Loading.remove(500);
             };
             fetchData();
         }
@@ -117,6 +118,7 @@ const SearchResult = () => {
                                                     <div>
                                                         {relate.array.slice(0, 3).map((com) => (
                                                             <Link
+                                                                key={com.id}
                                                                 href={`/search-result?q=${com.concept.name}&type=${type}&filter=${filter}`}
                                                             >
                                                                 <div
